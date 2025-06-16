@@ -4,7 +4,7 @@
 
 **Nome do Projeto:** EcoConnect - Plataforma de Reciclagem  
 **Gerente do Projeto:** Equipe de Desenvolvimento  
-**Data de Início:** 16/06/2025  
+**Data de Início:** 14/04/2025  
 **Data de Conclusão Prevista:** 16/06/2025  
 **Versão do Documento:** 1.0  
 
@@ -150,9 +150,7 @@ Desenvolver uma plataforma digital que conecte cidadãos, cooperativas e gestore
 
 **Aprovado por:** Equipe de Desenvolvimento  
 **Data:** 16/06/2025  
-**Assinatura:** [Digital]  
 
 ---
 
 Este termo de abertura autoriza o início do projeto EcoConnect e estabelece as bases para seu desenvolvimento e implementação.
-

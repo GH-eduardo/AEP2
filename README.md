@@ -210,26 +210,6 @@ src/
 - Docker e Docker Compose
 - PostgreSQL (se não usar Docker)
 
-### Usando Docker (recomendado)
-
-#### Desenvolvimento
-```bash
-# Iniciar em modo desenvolvimento
-npm run docker:dev
-
-# Ou diretamente com docker-compose
-docker-compose -f docker-compose.dev.yml up --build
-```
-
-#### Produção
-```bash
-# Iniciar em modo produção
-npm run docker:prod
-
-# Ou diretamente com docker-compose
-docker-compose up --build -d
-```
-
 ### Instalação Local
 
 1. **Clone o repositório**
@@ -264,6 +244,25 @@ npx prisma db seed
 npm run start:dev
 ```
 
+### Usando Docker
+
+#### Desenvolvimento
+```bash
+# Iniciar em modo desenvolvimento
+npm run docker:dev
+
+# Ou diretamente com docker-compose
+docker-compose -f docker-compose.dev.yml up --build
+```
+
+#### Produção
+```bash
+# Iniciar em modo produção
+npm run docker:prod
+
+# Ou diretamente com docker-compose
+docker-compose up --build -d
+```
 
 ## Variáveis de Ambiente
 
@@ -358,15 +357,6 @@ DATABASE_URL=<production-database-url>
 JWT_SECRET=<strong-secret-key>
 PORT=3000
 ```
-
-## Contribuição
-
-### Padrões de Código
-- TypeScript strict mode
-- ESLint + Prettier
-- Conventional Commits
-- Testes unitários obrigatórios
-
 ---
 
 **EcoConnect API** - Conectando tecnologia e sustentabilidade 🌱
