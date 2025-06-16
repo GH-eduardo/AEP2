@@ -1,0 +1,190 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  phone     String?
+  address   String?
+  password  String
+  role      UserRole @default(CITIZEN)
+  points    Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relacionamentos
+  agendamentos Agendamento[]
+  estatisticas Estatistica[]
+
+  @@map("users")
+}
+
+model PontoColeta {
+  id          String   @id @default(cuid())
+  nome        String
+  endereco    String
+  latitude    Float?
+  longitude   Float?
+  telefone    String?
+  horario     String
+  ativo       Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relacionamentos
+  materiais   MaterialPonto[]
+  agendamentos Agendamento[]
+
+  @@map("pontos_coleta")
+}
+
+model Material {
+  id        String   @id @default(cuid())
+  nome      String   @unique
+  descricao String?
+  icone     String?
+  cor       String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relacionamentos
+  pontos       MaterialPonto[]
+  agendamentos AgendamentoMaterial[]
+
+  @@map("materiais")
+}
+
+model MaterialPonto {
+  id            String @id @default(cuid())
+  pontoColetaId String
+  materialId    String
+
+  // Relacionamentos
+  pontoColeta PontoColeta @relation(fields: [pontoColetaId], references: [id], onDelete: Cascade)
+  material    Material    @relation(fields: [materialId], references: [id], onDelete: Cascade)
+
+  @@unique([pontoColetaId, materialId])
+  @@map("material_ponto")
+}
+
+model Agendamento {
+  id            String            @id @default(cuid())
+  userId        String
+  pontoColetaId String?
+  nome          String
+  endereco      String
+  telefone      String
+  data          DateTime
+  periodo       PeriodoColeta
+  observacoes   String?
+  status        StatusAgendamento @default(AGENDADO)
+  pesoEstimado  Float?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  // Relacionamentos
+  user        User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pontoColeta PontoColeta?          @relation(fields: [pontoColetaId], references: [id])
+  materiais   AgendamentoMaterial[]
+
+  @@map("agendamentos")
+}
+
+model AgendamentoMaterial {
+  id            String @id @default(cuid())
+  agendamentoId String
+  materialId    String
+  quantidade    Float? @default(0)
+
+  // Relacionamentos
+  agendamento Agendamento @relation(fields: [agendamentoId], references: [id], onDelete: Cascade)
+  material    Material    @relation(fields: [materialId], references: [id], onDelete: Cascade)
+
+  @@unique([agendamentoId, materialId])
+  @@map("agendamento_material")
+}
+
+model Estatistica {
+  id              String   @id @default(cuid())
+  userId          String
+  totalReciclado  Float    @default(0)
+  co2Economizado  Float    @default(0)
+  coletasRealizadas Int    @default(0)
+  mesReferencia   String   // formato: YYYY-MM
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relacionamentos
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, mesReferencia])
+  @@map("estatisticas")
+}
+
+model Cooperativa {
+  id          String   @id @default(cuid())
+  nome        String
+  cnpj        String   @unique
+  endereco    String
+  telefone    String
+  email       String   @unique
+  responsavel String
+  ativa       Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("cooperativas")
+}
+
+model ConteudoEducativo {
+  id        String            @id @default(cuid())
+  titulo    String
+  conteudo  String
+  tipo      TipoConteudo
+  categoria String?
+  ativo     Boolean           @default(true)
+  ordem     Int               @default(0)
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  @@map("conteudo_educativo")
+}
+
+// Enums
+enum UserRole {
+  CITIZEN
+  COOPERATIVE
+  ADMIN
+}
+
+enum StatusAgendamento {
+  AGENDADO
+  CONFIRMADO
+  EM_ANDAMENTO
+  CONCLUIDO
+  CANCELADO
+}
+
+enum PeriodoColeta {
+  MANHA
+  TARDE
+  NOITE
+}
+
+enum TipoConteudo {
+  DICA
+  GUIA
+  ARTIGO
+  VIDEO
+}
+

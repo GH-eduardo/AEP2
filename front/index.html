@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoConnect - Plataforma de Reciclagem</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <i class="fas fa-recycle"></i>
+                    <span>EcoConnect</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="#home" class="nav-link active">Início</a></li>
+                    <li><a href="#mapa" class="nav-link">Mapa</a></li>
+                    <li><a href="#agendamento" class="nav-link">Agendamento</a></li>
+                    <li><a href="#educacao" class="nav-link">Educação</a></li>
+                    <li><a href="#dashboard" class="nav-link">Dashboard</a></li>
+                </ul>
+                <div class="nav-toggle">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Home Section -->
+        <section id="home" class="section active">
+            <div class="hero">
+                <div class="hero-content">
+                    <h1>Conectando Comunidades para um Futuro Sustentável</h1>
+                    <p>Plataforma digital que conecta cidadãos, cooperativas e gestores públicos no processo de reciclagem, facilitando a comunicação e eficácia nas operações de coleta.</p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary" onclick="showSection('agendamento')">Agendar Coleta</button>
+                        <button class="btn btn-secondary" onclick="showSection('mapa')">Ver Pontos de Coleta</button>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <i class="fas fa-leaf hero-icon"></i>
+                </div>
+            </div>
+
+            <div class="features">
+                <div class="feature-card">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <h3>Pontos de Coleta</h3>
+                    <p>Encontre pontos de coleta próximos à sua localização</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-calendar-alt"></i>
+                    <h3>Agendamento</h3>
+                    <p>Agende coletas domiciliares de forma prática</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h3>Educação Ambiental</h3>
+                    <p>Aprenda sobre reciclagem e sustentabilidade</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Impacto Ambiental</h3>
+                    <p>Acompanhe seu impacto positivo no meio ambiente</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mapa Section -->
+        <section id="mapa" class="section">
+            <div class="section-header">
+                <h2>Pontos de Coleta</h2>
+                <p>Encontre pontos de coleta próximos à sua localização</p>
+            </div>
+            <div class="map-container">
+                <div class="map-filters">
+                    <select id="material-filter">
+                        <option value="">Todos os materiais</option>
+                        <option value="papel">Papel</option>
+                        <option value="plastico">Plástico</option>
+                        <option value="vidro">Vidro</option>
+                        <option value="metal">Metal</option>
+                        <option value="eletronicos">Eletrônicos</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="buscarLocalizacao()">
+                        <i class="fas fa-location-arrow"></i> Minha Localização
+                    </button>
+                </div>
+                <div class="map-placeholder">
+                    <i class="fas fa-map"></i>
+                    <p>Mapa interativo dos pontos de coleta</p>
+                    <small>Clique em "Minha Localização" para encontrar pontos próximos</small>
+                </div>
+                <div class="pontos-lista">
+                    <h3>Pontos Próximos</h3>
+                    <div id="pontos-container"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Agendamento Section -->
+        <section id="agendamento" class="section">
+            <div class="section-header">
+                <h2>Agendar Coleta</h2>
+                <p>Solicite a coleta de materiais recicláveis em sua residência</p>
+            </div>
+            <div class="agendamento-container">
+                <form class="agendamento-form" id="agendamento-form">
+                    <div class="form-group">
+                        <label for="nome">Nome Completo</label>
+                        <input type="text" id="nome" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="endereco">Endereço</label>
+                        <input type="text" id="endereco" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="telefone">Telefone</label>
+                        <input type="tel" id="telefone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="data">Data da Coleta</label>
+                        <input type="date" id="data" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="periodo">Período</label>
+                        <select id="periodo" required>
+                            <option value="">Selecione o período</option>
+                            <option value="manha">Manhã (8h às 12h)</option>
+                            <option value="tarde">Tarde (13h às 17h)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Materiais para Coleta</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" value="papel"> Papel</label>
+                            <label><input type="checkbox" value="plastico"> Plástico</label>
+                            <label><input type="checkbox" value="vidro"> Vidro</label>
+                            <label><input type="checkbox" value="metal"> Metal</label>
+                            <label><input type="checkbox" value="eletronicos"> Eletrônicos</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="observacoes">Observações</label>
+                        <textarea id="observacoes" rows="3" placeholder="Informações adicionais sobre os materiais"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Agendar Coleta</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Educação Section -->
+        <section id="educacao" class="section">
+            <div class="section-header">
+                <h2>Educação Ambiental</h2>
+                <p>Aprenda sobre reciclagem e práticas sustentáveis</p>
+            </div>
+            <div class="educacao-container">
+                <div class="educacao-tabs">
+                    <button class="tab-btn active" onclick="showTab('dicas')">Dicas de Reciclagem</button>
+                    <button class="tab-btn" onclick="showTab('separacao')">Como Separar</button>
+                    <button class="tab-btn" onclick="showTab('impacto')">Impacto Ambiental</button>
+                </div>
+                
+                <div id="dicas" class="tab-content active">
+                    <div class="dicas-grid">
+                        <div class="dica-card">
+                            <i class="fas fa-newspaper"></i>
+                            <h3>Papel</h3>
+                            <p>Remova grampos e fitas adesivas antes de descartar. Papel molhado não é reciclável.</p>
+                        </div>
+                        <div class="dica-card">
+                            <i class="fas fa-bottle-water"></i>
+                            <h3>Plástico</h3>
+                            <p>Lave as embalagens para remover restos de comida. Verifique o símbolo de reciclagem.</p>
+                        </div>
+                        <div class="dica-card">
+                            <i class="fas fa-wine-glass"></i>
+                            <h3>Vidro</h3>
+                            <p>Remova tampas e rótulos. Vidros quebrados devem ser embalados com cuidado.</p>
+                        </div>
+                        <div class="dica-card">
+                            <i class="fas fa-cog"></i>
+                            <h3>Metal</h3>
+                            <p>Latas de alumínio são 100% recicláveis. Amasse para economizar espaço.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="separacao" class="tab-content">
+                    <div class="separacao-guide">
+                        <h3>Guia de Separação de Resíduos</h3>
+                        <div class="cores-container">
+                            <div class="cor-item">
+                                <div class="cor-circle azul"></div>
+                                <span>Azul - Papel</span>
+                            </div>
+                            <div class="cor-item">
+                                <div class="cor-circle vermelho"></div>
+                                <span>Vermelho - Plástico</span>
+                            </div>
+                            <div class="cor-item">
+                                <div class="cor-circle verde"></div>
+                                <span>Verde - Vidro</span>
+                            </div>
+                            <div class="cor-item">
+                                <div class="cor-circle amarelo"></div>
+                                <span>Amarelo - Metal</span>
+                            </div>
+                            <div class="cor-item">
+                                <div class="cor-circle marrom"></div>
+                                <span>Marrom - Orgânico</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="impacto" class="tab-content">
+                    <div class="impacto-stats">
+                        <h3>Impacto da Reciclagem</h3>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <i class="fas fa-tree"></i>
+                                <span class="stat-number">17</span>
+                                <span class="stat-label">árvores poupadas por tonelada de papel reciclado</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-tint"></i>
+                                <span class="stat-number">50%</span>
+                                <span class="stat-label">menos água usada na reciclagem de papel</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-bolt"></i>
+                                <span class="stat-number">95%</span>
+                                <span class="stat-label">menos energia para reciclar alumínio</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="section">
+            <div class="section-header">
+                <h2>Meu Dashboard</h2>
+                <p>Acompanhe seu impacto ambiental e histórico de reciclagem</p>
+            </div>
+            <div class="dashboard-container">
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <i class="fas fa-recycle"></i>
+                        <div class="stat-info">
+                            <span class="stat-value" id="total-reciclado">0 kg</span>
+                            <span class="stat-title">Total Reciclado</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-calendar-check"></i>
+                        <div class="stat-info">
+                            <span class="stat-value" id="coletas-realizadas">0</span>
+                            <span class="stat-title">Coletas Realizadas</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-leaf"></i>
+                        <div class="stat-info">
+                            <span class="stat-value" id="co2-economizado">0 kg</span>
+                            <span class="stat-title">CO₂ Economizado</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-trophy"></i>
+                        <div class="stat-info">
+                            <span class="stat-value" id="pontos-usuario">0</span>
+                            <span class="stat-title">Pontos EcoConnect</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-content">
+                    <div class="historico-coletas">
+                        <h3>Histórico de Coletas</h3>
+                        <div id="historico-lista">
+                            <p class="no-data">Nenhuma coleta realizada ainda. <a href="#" onclick="showSection('agendamento')">Agende sua primeira coleta!</a></p>
+                        </div>
+                    </div>
+
+                    <div class="ranking">
+                        <h3>Ranking da Comunidade</h3>
+                        <div class="ranking-lista">
+                            <div class="ranking-item">
+                                <span class="posicao">1º</span>
+                                <span class="nome">Maria Silva</span>
+                                <span class="pontos">1,250 pts</span>
+                            </div>
+                            <div class="ranking-item">
+                                <span class="posicao">2º</span>
+                                <span class="nome">João Santos</span>
+                                <span class="pontos">980 pts</span>
+                            </div>
+                            <div class="ranking-item">
+                                <span class="posicao">3º</span>
+                                <span class="nome">Ana Costa</span>
+                                <span class="pontos">750 pts</span>
+                            </div>
+                            <div class="ranking-item destaque">
+                                <span class="posicao">15º</span>
+                                <span class="nome">Você</span>
+                                <span class="pontos">0 pts</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>EcoConnect</h3>
+                <p>Conectando comunidades para um futuro sustentável através da reciclagem inteligente.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Links Úteis</h3>
+                <ul>
+                    <li><a href="#home">Início</a></li>
+                    <li><a href="#mapa">Pontos de Coleta</a></li>
+                    <li><a href="#educacao">Educação</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contato</h3>
+                <p>Email: contato@ecoconnect.com</p>
+                <p>Telefone: (11) 9999-9999</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 EcoConnect. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
+

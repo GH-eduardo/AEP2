@@ -1,0 +1,52 @@
+# Ignorar node_modules
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignorar arquivos de build
+dist/
+build/
+
+# Ignorar arquivos de ambiente
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Ignorar arquivos de log
+*.log
+logs/
+
+# Ignorar arquivos de cache
+.cache/
+.parcel-cache/
+
+# Ignorar arquivos do sistema
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Ignorar arquivos do IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Ignorar arquivos de teste
+coverage/
+.nyc_output/
+
+# Ignorar arquivos do Docker
+.dockerignore
+
+# Ignorar arquivos do Prisma (gerados)
+prisma/migrations/migration_lock.toml
+
+# Ignorar arquivos temporários
+tmp/
+temp/
+

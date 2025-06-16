@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  # Banco de dados PostgreSQL
+  postgres:
+    image: postgres:15-alpine
+    container_name: ecoconnect-postgres-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ecoconnect
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+    networks:
+      - ecoconnect-dev-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d ecoconnect"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Aplicação NestJS em modo desenvolvimento
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: ecoconnect-api-dev
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/ecoconnect?schema=public"
+      JWT_SECRET: "ecoconnect-jwt-secret-key-2024-dev"
+      JWT_EXPIRES_IN: "7d"
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - ecoconnect-dev-network
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: >
+      sh -c "
+        npx prisma migrate dev --name init &&
+        npx prisma db seed &&
+        npm run start:dev
+      "
+
+  # Adminer para gerenciamento do banco
+  adminer:
+    image: adminer:latest
+    container_name: ecoconnect-adminer-dev
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - ecoconnect-dev-network
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+
+volumes:
+  postgres_dev_data:
+    driver: local
+
+networks:
+  ecoconnect-dev-network:
+    driver: bridge
+
